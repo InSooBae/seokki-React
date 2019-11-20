@@ -1,6 +1,5 @@
 import React from 'react';
 import Customer from './components/Customer';
-import './App.css';
 
 const customers = [
   {
