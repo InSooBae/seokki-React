@@ -20,9 +20,12 @@ export default function Recent() {
         <div className="uk-card-footer">top버튼</div>
       </div>
       <div className="uk-text-center" uk-sticky="offset : 520">
-        <button className="uk-button uk-button-default uk-button-large uk-text-bolder">
+        <a
+          href="/register"
+          className="uk-button uk-button-default uk-button-large uk-text-bolder"
+        >
           물품 등록
-        </button>
+        </a>
       </div>
       {/* 오른쪽 플로팅 배너 */}
     </div>

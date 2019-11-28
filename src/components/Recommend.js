@@ -18,7 +18,7 @@ export default function Recommend() {
                   tabIndex={0}
                 >
                   <a href="#">
-                    <img src="김치.jpg" />
+                    <img src="" />
                     <div className="uk-transition-slide-bottom uk-position-bottom uk-overlay uk-overlay-default">
                       <p className="uk-h4 uk-margin-remove uk-text-secondary">
                         추천1
@@ -37,7 +37,7 @@ export default function Recommend() {
                   tabIndex={0}
                 >
                   <a href="#">
-                    <img src="김치.jpg" />
+                    <img src="" />
                     <div className="uk-transition-slide-bottom uk-position-bottom uk-overlay uk-overlay-default">
                       <p className="uk-h4 uk-margin-remove uk-text-secondary">
                         추천2
@@ -56,7 +56,7 @@ export default function Recommend() {
                   tabIndex={0}
                 >
                   <a href="#">
-                    <img src="김치.jpg" />
+                    <img src="" />
                     <div className="uk-transition-slide-bottom uk-position-bottom uk-overlay uk-overlay-default">
                       <p className="uk-h4 uk-margin-remove uk-text-secondary">
                         추천3

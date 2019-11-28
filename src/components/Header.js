@@ -74,12 +74,12 @@ export default function Header() {
             </li>
           </ul>
           <div>
-            <a className="uk-navbar-toggle" href="#">
+            <a className="uk-navbar-toggle" href="/myPage">
               마이페이지
             </a>
           </div>
           <div>
-            <a className="uk-navbar-toggle" href="#">
+            <a className="uk-navbar-toggle" href="/login">
               로그아웃
             </a>
           </div>

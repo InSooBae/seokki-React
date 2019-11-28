@@ -8,7 +8,7 @@ export default function MyProfile() {
       <div className="uk-card uk-card-default" uk-sticky="offset : 150">
         <div className="uk-card-media-top">
           <img
-            src="./img/seok.png"
+            src="#"
             alt="프로필사진"
             height="80vh"
             style={{ maxWidth: '100%' }}

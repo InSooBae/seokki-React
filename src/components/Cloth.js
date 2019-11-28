@@ -6,6 +6,7 @@ export default function Cloth() {
     <div>
       <div className="uk-card uk-card-default uk-card-hover uk-card-body">
         <h3 className="uk-card-title">의 류</h3>
+
         <div
           className="uk-grid"
           uk-scrollspy="cls: uk-animation-fade; target: .uk-card; delay: 100; repeat: true"
