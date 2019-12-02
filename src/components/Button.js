@@ -6,8 +6,14 @@ const Container = styled.button`
   border-radius: 30px;
 `;
 
-const Button = ({ text, className, type, style }) => (
-  <Container className={className} type={type} style={style}>
+const Button = ({ text, className, type, style, onClick, disabled }) => (
+  <Container
+    className={className}
+    type={type}
+    style={style}
+    onClick={onClick}
+    disabled={disabled}
+  >
     {text}
   </Container>
 );

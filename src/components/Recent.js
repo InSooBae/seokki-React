@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Recent() {
   return (
@@ -20,12 +21,14 @@ export default function Recent() {
         <div className="uk-card-footer">top버튼</div>
       </div>
       <div className="uk-text-center" uk-sticky="offset : 520">
-        <a
-          href="/register"
-          className="uk-button uk-button-default uk-button-large uk-text-bolder"
-        >
-          물품 등록
-        </a>
+        <Link to="/register">
+          <a
+            href="/register"
+            className="uk-button uk-button-default uk-button-large uk-text-bolder"
+          >
+            물품 등록
+          </a>
+        </Link>
       </div>
       {/* 오른쪽 플로팅 배너 */}
     </div>

@@ -14,7 +14,8 @@ const Input = ({
   onChange,
   type = 'text',
   accept,
-  onBlur
+  onBlur,
+  invalid
 }) => (
   <Container
     className={className}
@@ -25,6 +26,7 @@ const Input = ({
     onBlur={onBlur}
     type={type}
     accept={accept}
+    invalid={invalid}
   />
 );
 

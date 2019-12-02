@@ -1,138 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-export default function Cloth() {
+export default function Cloth({ key, title, picture }) {
+  const [id, setId] = useState(key);
   return (
     /* 의류 */
-    <div>
-      <div className="uk-card uk-card-default uk-card-hover uk-card-body">
-        <h3 className="uk-card-title">의 류</h3>
 
-        <div
-          className="uk-grid"
-          uk-scrollspy="cls: uk-animation-fade; target: .uk-card; delay: 100; repeat: true"
-        >
-          <ul
-            className="uk-grid-small uk-child-width-1-2 uk-child-width-1-3@s uk-text-center"
-            data-uk-grid
-          >
-            <li>
-              <div className="uk-grid-match uk-grid-small" data-uk-grid>
-                <div className="uk-text-center uk-text-secondary">
-                  <div
-                    className="uk-inline-clip uk-transition-toggle"
-                    tabIndex={0}
-                  >
-                    <a href="#">
-                      <img src="김치.jpg" />
-                      <div className="uk-transition-slide-bottom uk-position-bottom uk-overlay uk-overlay-default">
-                        <p className="uk-h4 uk-margin-remove uk-text-secondary">
-                          김치
-                        </p>
-                      </div>
-                    </a>
-                  </div>
-                </div>
+    <li>
+      <div
+        className="uk-card uk-card-default uk-card-body uk-card-hover uk-grid-match uk-grid-small"
+        data-uk-grid
+      >
+        <div className="uk-text-center uk-text-secondary">
+          <div className="uk-inline-clip uk-transition-toggle" tabIndex={0}>
+            <h4 className="uk-card-title">{title}</h4>
+            <a href="#">
+              <img src={picture} />
+              <div className="uk-transition-slide-bottom uk-position-bottom uk-overlay uk-overlay-default">
+                <p className="uk-h4 uk-margin-remove uk-text-secondary">
+                  {title}
+                </p>
               </div>
-            </li>
-            <li>
-              <div className="uk-grid-match uk-grid-small" data-uk-grid>
-                <div className="uk-text-center uk-text-secondary">
-                  <div
-                    className="uk-inline-clip uk-transition-toggle"
-                    tabIndex={0}
-                  >
-                    <a href="#">
-                      <img src="김치.jpg" />
-                      <div className="uk-transition-slide-bottom uk-position-bottom uk-overlay uk-overlay-default">
-                        <p className="uk-h4 uk-margin-remove uk-text-secondary">
-                          김치
-                        </p>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="uk-grid-match uk-grid-small" data-uk-grid>
-                <div className="uk-text-center uk-text-secondary">
-                  <div
-                    className="uk-inline-clip uk-transition-toggle"
-                    tabIndex={0}
-                  >
-                    <a href="#">
-                      <img src="김치.jpg" />
-                      <div className="uk-transition-slide-bottom uk-position-bottom uk-overlay uk-overlay-default">
-                        <p className="uk-h4 uk-margin-remove uk-text-secondary">
-                          김치
-                        </p>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="uk-grid-match uk-grid-small" data-uk-grid>
-                <div className="uk-text-center uk-text-secondary">
-                  <div
-                    className="uk-inline-clip uk-transition-toggle"
-                    tabIndex={0}
-                  >
-                    <a href="#">
-                      <img src="김치.jpg" />
-                      <div className="uk-transition-slide-bottom uk-position-bottom uk-overlay uk-overlay-default">
-                        <p className="uk-h4 uk-margin-remove uk-text-secondary">
-                          김치
-                        </p>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="uk-grid-match uk-grid-small" data-uk-grid>
-                <div className="uk-text-center uk-text-secondary">
-                  <div
-                    className="uk-inline-clip uk-transition-toggle"
-                    tabIndex={0}
-                  >
-                    <a href="#">
-                      <img src="김치.jpg" />
-                      <div className="uk-transition-slide-bottom uk-position-bottom uk-overlay uk-overlay-default">
-                        <p className="uk-h4 uk-margin-remove uk-text-secondary">
-                          김치
-                        </p>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="uk-grid-match uk-grid-small" data-uk-grid>
-                <div className="uk-text-center uk-text-secondary">
-                  <div
-                    className="uk-inline-clip uk-transition-toggle"
-                    tabIndex={0}
-                  >
-                    <a href="#">
-                      <img src="김치.jpg" />
-                      <div className="uk-transition-slide-bottom uk-position-bottom uk-overlay uk-overlay-default">
-                        <p className="uk-h4 uk-margin-remove uk-text-secondary">
-                          김치
-                        </p>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    /* //의류 */
+    </li>
   );
 }

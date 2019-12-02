@@ -22,7 +22,6 @@ const Check = () => {
   //       console.log(error);
   //     });
   // }
-  console.log(localStorage.getItem('userToken'));
   if (localStorage.getItem('userToken') == null) return false;
   else return true;
 };

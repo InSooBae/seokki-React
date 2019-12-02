@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import Input from './Input';
 import Button from './Button';
 import useInput from '../Hooks/useInput';
-import { post } from 'axios';
+import axios, { post } from 'axios';
+import logo from '../image/seok (128).png';
 
 const Wrapper = styled.div`
   min-height: 80vh;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,37 +51,25 @@ const Form = styled(Box)`
 
 const Select = styled.select``;
 
-const useInputForPw = init => {
-  const [value, setValue] = useState(init);
-  const [invalid, setInvalid] = useState(false);
-
-  const onChange = e => {
-    const {
-      target: { value }
-    } = e;
-    setValue(value);
-  };
-
-  const onBlur = e => {
-    const {
-      target: { value }
-    } = e;
-    setValue(value);
-    setInvalid(!/(?=.*\d)(?=.*[a-z]).{6,}/.test(value));
-  };
-
-  return { value, invalid, onChange, onBlur };
-};
-
 export default () => {
   const [action, setAction] = useState('logIn');
   const [photo, setPhoto] = useState('');
   const pwAsk = useInput(1);
   const pwAnswer = useInput('');
-  const password = useInputForPw('');
+  const password = useInput('');
   const nickname = useInput('');
   const intro = useInput('');
   const id = useInput('');
+  const [valid, isvalid] = useState('');
+
+  const checkPW = () => {
+    isvalid(valid => /(?=.*\d)(?=.*[a-z]).{6,}/.test(password.value));
+  };
+
+  const checkLength = e => {
+    const check = () => /.{6,}/.test(e.value);
+    return check;
+  };
 
   const addUser = () => {
     const url = '/user/signup';
@@ -98,14 +88,80 @@ export default () => {
     return post(url, formData, config);
   };
 
+  const inHandleFormSubmit = e => {
+    e.preventDefault();
+    signInUser().then(response => {});
+  };
+
   const handleFormSubmit = e => {
     e.preventDefault();
     addUser().then(response => {
-      console.log(response.data);
+      console.log(response);
+      setAction(action => 'logIn');
     });
   };
   const onChangeImage = e => {
     setPhoto(e.target.files[0]);
+  };
+
+  const nickNameEqual = e => {
+    e.preventDefault();
+    console.log(nickname.value);
+    axios({
+      method: 'post',
+      url: '/user/doublecheck',
+      headers: {},
+      data: {
+        nickname: `${nickname.value}` // This is the body part
+      }
+    })
+      .then(res => {
+        alert('ㄱㅊ');
+      })
+      .catch(err => {
+        alert('아이디 중복');
+      });
+  };
+
+  const signInUser = () => {
+    return axios({
+      method: 'post',
+      url: '/user/signin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        id: `${id.value}`,
+        password: `${password.value}`
+      }
+    })
+      .then(response => {
+        /* 로그인 성공 */
+        console.log(response);
+        alert('로그인 성공');
+        window.location.href = '/';
+        localStorage.setItem(
+          'userToken',
+          JSON.stringify({
+            data: response.data.data,
+            nickname: response.data.nickname
+          })
+        );
+      })
+      .catch(error => {
+        /* 로그인 실패 */
+        console.log(error.response);
+        alert('아이디 혹은 비밀번호가 일치하지 않습니다.');
+      });
+    /* const url = '/user/signin';
+    const formData = new FormData();
+
+    formData.append('id', id.value);
+    formData.append('password', password.value);
+    const config = {
+      'content-type': 'multipart/form-data'
+    };
+    return post(url, formData, config); */
   };
 
   const inputClassNameHelper = boolean => {
@@ -118,24 +174,50 @@ export default () => {
         return '';
     }
   };
+  const isOK = boolean => {
+    switch (boolean) {
+      case true:
+        return false;
+      case false:
+        return true;
+      default:
+        return false;
+    }
+  };
   return (
     <Wrapper>
       <Form>
+        <div>
+          <img src={logo}></img>
+        </div>
         {action === 'logIn' ? (
-          <form>
+          <form onSubmit={inHandleFormSubmit}>
             <div className="uk-margin">
               <label htmlFor="nameInput">아이디</label>
-              <Input className={`uk-input`} placeholder={'ID'} {...id} />
+              <Input
+                className={`uk-input`}
+                placeholder={'ID'}
+                onBlur={console.log(id.value)}
+                {...id}
+              />
             </div>
             <div className="uk-margin">
               <label htmlFor="emailInput">비밀번호</label>
               <Input
-                type={'password'}
-                className={`uk-input`}
+                className={`uk-input uk-form-width-medium ${inputClassNameHelper(
+                  valid
+                )}`}
                 placeholder={'Password'}
                 {...password}
+                onBlur={checkPW}
+                type="password"
               />
             </div>
+            {isOK(valid) && (
+              <div className="uk-text-danger">
+                비밀번호는 6자리이상,숫자,특수기호를 포함해야 합니다.
+              </div>
+            )}
             <Button
               type={'submit'}
               className={'uk-button uk-button-primary uk-width-1-1'}
@@ -169,7 +251,6 @@ export default () => {
                 </div>
               </div>
             </div>
-
             <div className="uk-margin-small uk-grid-small uk-grid" data-uk-grid>
               <label style={{ margin: 'auto' }}>닉네임</label>
 
@@ -185,7 +266,8 @@ export default () => {
                 <Button
                   text={'중복확인'}
                   style={{ marginTop: 0 }}
-                  className="uk-button uk-button-primary uk-width-1-1"
+                  onClick={nickNameEqual}
+                  className={'uk-button uk-button-primary uk-width-1-1'}
                 />
               </div>
             </div>
@@ -194,9 +276,7 @@ export default () => {
 
               <div className="uk-width-expand">
                 <Input
-                  className={`uk-input uk-form-width-medium ${inputClassNameHelper(
-                    intro.value
-                  )}`}
+                  className={`uk-input uk-form-width-medium ${inputClassNameHelper()}`}
                   placeholder={'Introduce'}
                   {...intro}
                 />
@@ -222,19 +302,25 @@ export default () => {
               </div>
             </div>
             <div className="uk-margin-small uk-grid-small uk-grid" data-uk-grid>
-              <label style={{ margin: 'auto' }}>아이디</label>
+              <label style={{ margin: 'auto' }}>비밀번호</label>
 
               <div className="uk-width-expand">
                 <Input
                   className={`uk-input uk-form-width-medium ${inputClassNameHelper(
-                    password.invalid
+                    valid
                   )}`}
-                  placeholder={'Password'}
+                  placeholder={'비밀번호는 6자리이상,숫자,특수기호 포함'}
                   {...password}
+                  onBlur={checkPW}
                   type="password"
                 />
               </div>
             </div>
+            {isOK(valid) && (
+              <div className="uk-text-danger">
+                비밀번호는 6자리이상,숫자,특수기호를 포함해야 합니다.
+              </div>
+            )}
             <div>
               <label>비밀번호 찾기 질문</label>
               <Select {...pwAsk} className="uk-select">
@@ -251,10 +337,18 @@ export default () => {
                 {...pwAnswer}
               />
             </div>
-            <Button
-              className={'uk-button uk-button-primary uk-width-1-1'}
-              text={'Sign up'}
-            />
+            {valid === false ? (
+              <Button
+                className={`uk-button uk-button-primary uk-width-1-1`}
+                text={'Sign up'}
+                disabled
+              />
+            ) : (
+              <Button
+                className={`uk-button uk-button-primary uk-width-1-1`}
+                text={'Sign up'}
+              />
+            )}
           </form>
         )}
       </Form>
