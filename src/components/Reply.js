@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from '../image/seok (128).png';
 import axios from 'axios';
 import useInput from '../Hooks/useInput';
@@ -7,6 +7,13 @@ const Reply = ({ key, comment_id, item, picture, writer, text, date }) => {
   const [modify, setModify] = useState(false);
   const modText = useInput('');
   const loc = JSON.parse(localStorage.userToken).data[0];
+  const [repAdmin, setRepAdmin] = useState(false);
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.userToken).data[1] === writer)
+      setRepAdmin(true);
+    else setRepAdmin(false);
+  });
 
   const modifyTrue = () => setModify(true);
   const modifyFalse = () => setModify(false);
@@ -82,18 +89,24 @@ const Reply = ({ key, comment_id, item, picture, writer, text, date }) => {
             {text}
           </div>
           <p className="uk-flex uk-flex-right uk-margin-top">
-            <button
-              onClick={modifyTrue}
-              className="uk-button uk-button-primary"
-            >
-              댓 글 수 정
-            </button>
-            <button
-              onClick={deleteReply}
-              className="uk-button uk-button-primary"
-            >
-              삭 제
-            </button>
+            {repAdmin ? (
+              <>
+                <button
+                  onClick={modifyTrue}
+                  className="uk-button uk-button-primary"
+                >
+                  댓 글 수 정
+                </button>
+                <button
+                  onClick={deleteReply}
+                  className="uk-button uk-button-primary"
+                >
+                  삭 제
+                </button>
+              </>
+            ) : (
+              <></>
+            )}
           </p>
           {date}
         </div>

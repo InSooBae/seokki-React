@@ -6,7 +6,6 @@ export default function MyProfile() {
   const loc = JSON.parse(localStorage.userToken).data[0];
 
   useEffect(() => {
-    console.log(loc);
     axios
       .get('http://seokki.kro.kr/mypage', {
         headers: {
@@ -14,19 +13,16 @@ export default function MyProfile() {
         }
       })
       .then(function(response) {
-        console.log(response);
         const {
           data: {
             data: [a]
           }
         } = response;
-        console.log(a);
         setProfile(a);
       })
       .catch(function(error) {
         console.log(error);
       });
-    console.log(profile);
 
     setLoading(false);
   }, []);

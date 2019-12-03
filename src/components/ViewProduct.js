@@ -57,7 +57,7 @@ export default function ViewProduct({ history, location, match }) {
         console.log(error);
       });
   };
-
+  //마운트시 실행 url / 기준으로 나눈뒤 마지막 숫자 추가해
   useEffect(() => {
     let a = match.url;
     let b = a.split('/')[2];
@@ -68,6 +68,7 @@ export default function ViewProduct({ history, location, match }) {
         }
       })
       .then(function(response) {
+        console.log(response.data.data);
         setSer(...response.data.data);
       })
       .catch(function(error) {
@@ -77,7 +78,7 @@ export default function ViewProduct({ history, location, match }) {
   }, []);
   return (
     <div>
-      <form className="uk-width-expand">
+      <form>
         <div className="uk-card uk-card-default uk-card-hover uk-card-body ">
           <h3 className="uk-card-title">{ser.title}</h3>
           <ul
