@@ -188,7 +188,7 @@ export default function Home() {
               data-uk-grid
             >
               {book.map(arr => (
-                <Link to={`/view${arr.item_idx}`}>
+                <Link to={`/view/${arr.item_idx}`}>
                   <Book
                     key={arr.item_idx}
                     title={arr.title}
