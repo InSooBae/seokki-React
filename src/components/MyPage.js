@@ -9,11 +9,51 @@ export default function MyPage() {
   const [loading, setLoading] = useState(true);
   const [myProd, setMyProd] = useState([]);
   const [myRequire, setMyRequire] = useState([]);
+  const [myRequest, setMyRequest] = useState([]);
+  const [myTran, setMyTran] = useState([]);
+  const [myLike, setMyLike] = useState([]);
   const loc = JSON.parse(localStorage.userToken).data[0];
   let temp = [];
 
-  const myProduct = async () => {
-    await axios
+  // const myProduct = () => {
+  //   axios
+  //     .get('/mypage/myproduct', {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         token: loc
+  //       }
+  //     })
+  //     .then(response => {
+  //       setMyProd(response.data.data);
+  //       // setMyProd({ myProd: response.data.data.map() });
+
+  //     })
+  //     .catch(error => {
+  //       console.log(error.message);
+  //       console.log(error);
+  //     });
+  // };
+
+  // const myProduct = () => {
+  //   axios
+  //     .get('/mypage/myproduct', {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         token: loc
+  //       }
+  //     })
+  //     .then(response => {
+  //       setMyProd(response.data.data);
+  //       // setMyProd({ myProd: response.data.data.map() });
+  //     })
+  //     .catch(error => {
+  //       console.log(error.message);
+  //       console.log(error);
+  //     });
+  // };
+
+  const myProduct = () => {
+    axios
       .get('/mypage/myproduct', {
         headers: {
           'Content-Type': 'application/json',
@@ -21,15 +61,14 @@ export default function MyPage() {
         }
       })
       .then(response => {
-        console.log(response.data.data);
-
-        setMyProd({ myProd: response.data.data });
+        console.log(response);
+        setMyProd(response.data.data);
+        // setMyProd({ myProd: response.data.data.map() });
       })
       .catch(error => {
         console.log(error.message);
         console.log(error);
       });
-    console.log(myProd);
   };
   useEffect(() => {
     console.log(loc);
@@ -42,22 +81,14 @@ export default function MyPage() {
         }
       })
       .then(response => {
-        console.log(response);
-        const {
-          data: {
-            data: [a]
-          }
-        } = response;
-        setMyRequire(a);
+        setMyRequire(response.data.data);
       })
       .catch(error => {
         console.log(error.message);
         console.log(error);
       });
-    setLoading(false);
-    setLoading(false);
     console.log(myProd);
-  }, [loading]);
+  }, []);
   return (
     <div>
       <div className="uk-card uk-card-hover uk-card-body">
@@ -83,8 +114,35 @@ export default function MyPage() {
             <hr className="uk-divider-icon" />
             {/* 마이페이지 */}
             <ul className="js-filter uk-list" uk-accordion="multiple: true">
-              <MyProd />
-              <MyReq />
+              {console.log(myProd)}
+              {myProd ? (
+                myProd.map(arr => {
+                  return (
+                    <MyProd
+                      key={arr.date}
+                      date={arr.date}
+                      title={arr.title}
+                      picture={arr.thumbnail}
+                    />
+                  );
+                })
+              ) : (
+                <div>존재안함</div>
+              )}
+              {myRequire ? (
+                myRequire.map(arr => {
+                  return (
+                    <MyReq
+                      key={arr.date}
+                      date={arr.date}
+                      title={arr.title}
+                      picture={arr.thumbnail}
+                    />
+                  );
+                })
+              ) : (
+                <div>존재안함</div>
+              )}
               <MyRequest />
               <MyTran />
               <MyLike />

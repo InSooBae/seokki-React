@@ -23,7 +23,8 @@ export default class Header extends Component {
               </a>
             </div>
             <div className="uk-navbar-nav">
-              <em>name</em>님 환영합니다!
+              <em>{JSON.parse(localStorage.userToken).data[1]}</em>님
+              환영합니다!
             </div>
           </div>
           {/* 우측(nav)  */}
@@ -90,7 +91,7 @@ export default class Header extends Component {
               </Link>
             </div>
             <div>
-              <a onClick={logOut} className="uk-navbar-toggle" href="/login">
+              <a onClick={logOut} className="uk-navbar-toggle" href="/">
                 로그아웃
               </a>
             </div>

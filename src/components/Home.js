@@ -50,7 +50,6 @@ export default function Home() {
           data: { data }
         } = response;
         setRec(data);
-        console.log(data);
       })
       .catch(function(error) {
         console.log(error);
@@ -59,13 +58,11 @@ export default function Home() {
     axios
       .get('http://seokki.kro.kr/home/latelyList')
       .then(res => {
-        console.log(res);
         const {
           data: {
             data: [food, elec, book, cloth]
           }
         } = res;
-        console.log(food);
         setFood(food);
         setElec(elec);
         setBook(book);
@@ -73,8 +70,7 @@ export default function Home() {
         setLoading(false);
       })
       .catch(err => console.log(err));
-    console.log(food);
-  }, [loading]);
+  }, []);
   // console.log(recent);
   //   setFood(recent[0]);
   //   setElec(recent[1]);
@@ -105,15 +101,19 @@ export default function Home() {
             className="uk-grid-small uk-child-width-1-2 uk-child-width-1-3@s uk-text-center"
             data-uk-grid
           >
-            {rec.map(arr => (
-              <Link to={`/${arr.item_idx}`}>
-                <Recommend
-                  key={arr.item_idx}
-                  title={arr.title}
-                  picture={arr.thumbnail}
-                />
-              </Link>
-            ))}
+            {rec ? (
+              rec.map(arr => (
+                <Link to={`/view/${arr.item_idx}`}>
+                  <Recommend
+                    key={arr.item_idx}
+                    title={arr.title}
+                    picture={arr.thumbnail}
+                  />
+                </Link>
+              ))
+            ) : (
+              <div>데이터 없음</div>
+            )}
           </ul>
         </div>
       </div>
@@ -133,8 +133,10 @@ export default function Home() {
               className="uk-grid-small uk-child-width-1-2 uk-child-width-1-3@s uk-text-center"
               data-uk-grid
             >
+              {console.log(food)}
+
               {food.map(arr => (
-                <Link to={`/${arr.item_idx}`}>
+                <Link to={`/view/${arr.item_idx}`}>
                   <Food
                     key={arr.item_idx}
                     title={arr.title}
@@ -157,15 +159,19 @@ export default function Home() {
               className="uk-grid-small uk-child-width-1-2 uk-child-width-1-3@s uk-text-center"
               data-uk-grid
             >
-              {elec.map(arr => (
-                <Link to={`/${arr.item_idx}`}>
-                  <Elec
-                    key={arr.item_idx}
-                    title={arr.title}
-                    picture={arr.thumbnail}
-                  />
-                </Link>
-              ))}
+              {elec ? (
+                elec.map(arr => (
+                  <Link to={`/view/${arr.item_idx}`}>
+                    <Elec
+                      key={arr.item_idx}
+                      title={arr.title}
+                      picture={arr.thumbnail}
+                    />
+                  </Link>
+                ))
+              ) : (
+                <div>데이터 없음</div>
+              )}
             </ul>
           </div>
         </div>
@@ -182,7 +188,7 @@ export default function Home() {
               data-uk-grid
             >
               {book.map(arr => (
-                <Link to={`/${arr.item_idx}`}>
+                <Link to={`/view${arr.item_idx}`}>
                   <Book
                     key={arr.item_idx}
                     title={arr.title}
@@ -206,7 +212,7 @@ export default function Home() {
               data-uk-grid
             >
               {cloth.map(arr => (
-                <Link to={`/${arr.item_idx}`}>
+                <Link to={`/view/${arr.item_idx}`}>
                   <Cloth
                     key={arr.item_idx}
                     title={arr.title}

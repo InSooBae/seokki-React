@@ -15,9 +15,9 @@ import MyProfile from './MyProfile';
 import Recent from './Recent';
 import Footer from './Footer';
 import Register from './Register';
-import Project from './Project';
 import axios from 'axios';
 import ViewProduct from './ViewProduct';
+import SearchResult from './SearchResult';
 // if logged in
 
 const LoggedInRoutes = () => (
@@ -29,9 +29,10 @@ const LoggedInRoutes = () => (
         <MyProfile />
         <div className="uk-width-expand">
           <Route path="/" exact component={Home} />
-          <Route path="/view:id" exact component={ViewProduct} />
+          <Route path="/view/:id" exact component={ViewProduct} />
           <Route path="/mypage" exact component={MyPage} />
           <Route path="/register" exact component={Register} />
+          <Route path="/search" exact component={SearchResult} />
         </div>
         <Recent />
       </div>

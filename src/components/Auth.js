@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Input from './Input';
-import Button from './Button';
+import Input from '../Hooks/Input';
+import Button from '../Hooks/Button';
 import useInput from '../Hooks/useInput';
 import axios, { post } from 'axios';
 import logo from '../image/seok (128).png';
@@ -116,7 +116,7 @@ export default () => {
       }
     })
       .then(res => {
-        alert('ㄱㅊ');
+        alert('사용 가능합니다');
       })
       .catch(err => {
         alert('아이디 중복');
@@ -204,20 +204,14 @@ export default () => {
             <div className="uk-margin">
               <label htmlFor="emailInput">비밀번호</label>
               <Input
-                className={`uk-input uk-form-width-medium ${inputClassNameHelper(
-                  valid
-                )}`}
+                className={`uk-input uk-form-width-medium `}
                 placeholder={'Password'}
                 {...password}
                 onBlur={checkPW}
                 type="password"
               />
             </div>
-            {isOK(valid) && (
-              <div className="uk-text-danger">
-                비밀번호는 6자리이상,숫자,특수기호를 포함해야 합니다.
-              </div>
-            )}
+
             <Button
               type={'submit'}
               className={'uk-button uk-button-primary uk-width-1-1'}
