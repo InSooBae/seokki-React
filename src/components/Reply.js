@@ -44,13 +44,12 @@ const Reply = ({ key, comment_id, item, picture, writer, text, date }) => {
       {modify ? (
         <div className="uk-card uk-card-default uk-card-hover uk-card-body ">
           <h3 className="uk-card-title">댓 글</h3>
-          <textarea
+          <input
             className="uk-textarea "
-            rows={1}
             placeholder="댓글을 입력하세요."
-            defaultValue={text}
+            value={text}
             {...modText}
-          />
+          ></input>
           <div className="uk-flex uk-flex-right uk-margin-top">
             <p uk-margin>
               <button

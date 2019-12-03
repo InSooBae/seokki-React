@@ -104,7 +104,7 @@ export default () => {
     setPhoto(e.target.files[0]);
   };
 
-  const nickNameEqual = e => {
+  const isNickNameDuplicate = e => {
     e.preventDefault();
     console.log(nickname.value);
     axios({
@@ -119,7 +119,26 @@ export default () => {
         alert('사용 가능합니다');
       })
       .catch(err => {
-        alert('아이디 중복');
+        alert('닉네임 중복');
+      });
+  };
+
+  const isIdDuplicate = e => {
+    e.preventDefault();
+
+    axios({
+      method: 'post',
+      url: '/user/idcheck',
+      headers: {},
+      data: {
+        id: `${id.value}` // This is the body part
+      }
+    })
+      .then(res => {
+        alert('사용 가능합니다');
+      })
+      .catch(err => {
+        alert('id 중복');
       });
   };
 
@@ -260,7 +279,7 @@ export default () => {
                 <Button
                   text={'중복확인'}
                   style={{ marginTop: 0 }}
-                  onClick={nickNameEqual}
+                  onClick={isNickNameDuplicate}
                   className={'uk-button uk-button-primary uk-width-1-1'}
                 />
               </div>
@@ -290,6 +309,7 @@ export default () => {
               <div className="uk-width-auto">
                 <Button
                   text={'중복확인'}
+                  onClick={isIdDuplicate}
                   style={{ marginTop: 0 }}
                   className="uk-button uk-button-primary uk-width-1-1"
                 />
