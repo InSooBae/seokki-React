@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 export default function MyProfile() {
   const [profile, setProfile] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +43,19 @@ export default function MyProfile() {
           />
         </div>
         <div className="uk-card-body">
-          <h3 className="uk-card-title">{profile.nickname}</h3>
+          <div className="uk-flex">
+            <h3 className="uk-card-title uk-width-3-5">{profile.nickname}</h3>
+            <div className="uk-width-2-5">
+              <Link to="/edit">
+                <a>
+                  <span class="uk-label uk-button uk-button-text">
+                    정보수정
+                  </span>
+                </a>
+              </Link>
+            </div>
+          </div>
+
           <p>{profile.intro}</p>
         </div>
         <div className="uk-card-footer">{profile.star}</div>

@@ -52,7 +52,7 @@ export default function MyPage() {
   //     });
   // };
 
-  const myProduct = () => {
+  const Product = () => {
     axios
       .get('/mypage/myproduct', {
         headers: {
@@ -70,9 +70,8 @@ export default function MyPage() {
         console.log(error);
       });
   };
-  useEffect(() => {
-    console.log(loc);
-    myProduct();
+
+  const Require = () => {
     axios
       .get('/mypage/ask', {
         headers: {
@@ -87,6 +86,29 @@ export default function MyPage() {
         console.log(error.message);
         console.log(error);
       });
+  };
+
+  const Like = () => {
+    axios
+      .get('/board/like', {
+        headers: {
+          'Content-Type': 'application/json',
+          token: loc
+        }
+      })
+      .then(response => {
+        setMyLike(response.data.data);
+      })
+      .catch(error => {
+        console.log(error.message);
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    Product();
+    Require();
+    Like();
     console.log(myProd);
   }, []);
   return (
@@ -119,7 +141,8 @@ export default function MyPage() {
                 myProd.map(arr => {
                   return (
                     <MyProd
-                      key={arr.date}
+                      key={arr.item_idx}
+                      item={arr.item_idx}
                       date={arr.date}
                       title={arr.title}
                       picture={arr.thumbnail}
@@ -145,7 +168,15 @@ export default function MyPage() {
               )}
               <MyRequest />
               <MyTran />
-              <MyLike />
+              {myLike ? (
+                myLike.map(arr => {
+                  return (
+                    <MyLike key={1} picture={arr.thumbnail} title={arr.title} />
+                  );
+                })
+              ) : (
+                <div>존재안함</div>
+              )}
             </ul>
             {/* 마이페이지 */}
           </div>

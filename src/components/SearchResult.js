@@ -19,7 +19,6 @@ export default function SearchResult({ path, location, match }) {
       })
       .catch(function(error) {
         console.log(error);
-        alert('찾는 내용이 없습니다.');
       })
       .finally(function() {
         // always executed

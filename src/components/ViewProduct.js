@@ -30,7 +30,23 @@ export default function ViewProduct({ history, location, match }) {
     alert('교환신청하였습니다.');
   };
 
-  const deleteProduct = () => {
+  const Dialog = a => {
+    switch (a) {
+      case 1:
+        return <h2 className="uk-select">식 료 품</h2>;
+      case 2:
+        return <h2 className="uk-select">전 자 기 기</h2>;
+      case 3:
+        return <h2 className="uk-select">중 고 서 적</h2>;
+      case 4:
+        return <h2 className="uk-select">의 류</h2>;
+      default:
+        return null;
+    }
+  };
+
+  const deleteProduct = e => {
+    e.preventDefault();
     let a = match.url;
     let b = a.split('/')[2];
     axios({
@@ -259,10 +275,12 @@ export default function ViewProduct({ history, location, match }) {
                   <h4>{ser.text}</h4>
                   <h4>{ser.hashtag}</h4>
 
-                  <h2 className="uk-select">식 료 품</h2>
+                  {Dialog(ser.category_idx)}
 
                   <div className="uk-card uk-card-default uk-card-body uk-width-expand uk-margin-top ">
                     <h3 className="uk-card-title ">
+                      <div>{ser.nickname}</div>
+
                       <button
                         onClick={clickLike}
                         className="uk-button uk-button-danger"
@@ -285,26 +303,32 @@ export default function ViewProduct({ history, location, match }) {
               </div>
               <div className="uk-flex uk-flex-right uk-margin-top">
                 <p data-uk-margin>
+                  {ser.nickname ==
+                  JSON.parse(localStorage.userToken).data[1] ? (
+                    <>
+                      <button
+                        className="uk-button uk-button-primary"
+                        onClick={() => setMod(true)}
+                      >
+                        수정
+                      </button>
+                      <button
+                        onClick={deleteProduct}
+                        className="uk-button uk-button-primary"
+                      >
+                        삭제
+                      </button>
+                    </>
+                  ) : (
+                    <span></span>
+                  )}
+
                   <button
-                    className="uk-button uk-button-primary"
-                    onClick={() => setMod(true)}
-                  >
-                    수정
-                  </button>
-                  <button
-                    onClick={deleteProduct}
+                    onClick={pass}
                     className="uk-button uk-button-primary"
                   >
-                    삭제
+                    거 래 요 청
                   </button>
-                  <Link to="/mypage">
-                    <button
-                      onClick={pass}
-                      className="uk-button uk-button-primary"
-                    >
-                      거 래 요 청
-                    </button>
-                  </Link>
                 </p>
               </div>
             </div>

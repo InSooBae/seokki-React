@@ -15,9 +15,9 @@ import MyProfile from './MyProfile';
 import Recent from './Recent';
 import Footer from './Footer';
 import Register from './Register';
-import axios from 'axios';
 import ViewProduct from './ViewProduct';
 import SearchResult from './SearchResult';
+import EditInfo from './EditInfo';
 // if logged in
 
 const LoggedInRoutes = () => (
@@ -33,6 +33,7 @@ const LoggedInRoutes = () => (
           <Route path="/mypage" exact component={MyPage} />
           <Route path="/register" exact component={Register} />
           <Route path="/search" exact component={SearchResult} />
+          <Route path="/edit" exact component={EditInfo} />
         </div>
         <Recent />
       </div>
