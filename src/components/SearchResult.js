@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Querystring from 'query-string';
 import axios from 'axios';
 import SearchList from './SearchList';
 

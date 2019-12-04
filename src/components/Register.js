@@ -17,7 +17,6 @@ export default function Register() {
   const loc = JSON.parse(localStorage.userToken).data[0];
 
   const addProduct = () => {
-    console.log(title, hashtag, category_idx);
     const url = '/board';
     const formData = new FormData();
     formData.append('thumbnail', photo);
