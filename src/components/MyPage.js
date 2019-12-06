@@ -3,10 +3,11 @@ import MyRequest from './MyRequest';
 import MyProd from './MyProd';
 import MyReq from './MyRequire';
 import MyTran from './MyTran';
-import MyLike from './MyLike';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import change from '../image/swap.png';
 export default function MyPage() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState();
   const [myProd, setMyProd] = useState([]);
   const [myRequire, setMyRequire] = useState([]);
   const [myRequest, setMyRequest] = useState([]);
@@ -105,12 +106,16 @@ export default function MyPage() {
       });
   };
 
+  const handleUpdata = () => {
+    setLoading({});
+  };
+
   useEffect(() => {
     Product();
     Require();
     Like();
     console.log(myProd);
-  }, []);
+  }, [loading]);
   return (
     <div>
       <div className="uk-card uk-card-hover uk-card-body">
@@ -124,7 +129,9 @@ export default function MyPage() {
                 <a href="#">요청한 상품</a>
               </li>
               <li uk-filter-control=".tag-Request">
-                <a href="#">요청받은 상품</a>
+                <a onClick={handleUpdata} href="#">
+                  요청받은 상품
+                </a>
               </li>
               <li uk-filter-control=".tag-Tran">
                 <a href="#">교환 완료</a>
@@ -140,13 +147,45 @@ export default function MyPage() {
               {myProd ? (
                 myProd.map(arr => {
                   return (
-                    <MyProd
-                      key={arr.item_idx}
-                      item={arr.item_idx}
-                      date={arr.date}
-                      title={arr.title}
-                      picture={arr.thumbnail}
-                    />
+                    <li className="uk-card uk-card-default uk-card-body tag-MyProd">
+                      <Link to={`/view/${arr.item_idx}`}>
+                        <img
+                          width="100px"
+                          height="100px"
+                          src={arr.thumbnail}
+                        ></img>
+                        <span>{arr.title}</span>
+                      </Link>
+                      <div className="uk-align-right uk-child-width-1-1">
+                        <button className="uk-button uk-button-text uk-grid-margin">
+                          수정
+                        </button>
+                        <button
+                          onClick={() => {
+                            const loc = JSON.parse(localStorage.userToken)
+                              .data[0];
+
+                            axios({
+                              method: 'delete',
+                              url: `/board/${arr.item_idx}`,
+                              headers: { token: loc }
+                            })
+                              .then(function(response) {
+                                console.log(response);
+                                setLoading({});
+                              })
+                              .catch(function(error) {
+                                console.log(error);
+                                setLoading({});
+                              });
+                          }}
+                          className="uk-button uk-button-text uk-grid-margin"
+                        >
+                          삭제
+                        </button>
+                      </div>
+                      <div>{arr.date}</div>
+                    </li>
                   );
                 })
               ) : (
@@ -154,13 +193,34 @@ export default function MyPage() {
               )}
               {myRequire ? (
                 myRequire.map(arr => {
+                  console.log(arr);
                   return (
-                    <MyReq
-                      key={arr.date}
-                      date={arr.date}
-                      title={arr.title}
-                      picture={arr.thumbnail}
-                    />
+                    <li className="uk-card uk-card-default uk-card-body tag-Require">
+                      <img
+                        width="100px"
+                        height="100px"
+                        src={arr.requested_item_thumbnail}
+                      ></img>
+                      {arr.requested_item_title}
+                      <img width="100px" height="100px" src={change}></img>
+                      <img
+                        width="100px"
+                        height="100px"
+                        src={arr.ask_item_thumbnail}
+                      ></img>
+                      {arr.ask_item_title}
+                      <span></span>
+                      <a className="uk-card-badge uk-label">거래취소</a>
+                    </li>
+                    // <MyReq
+                    //   key={arr.date}
+                    //   date={arr.date}
+                    //   aTitle={arr.ask_item_title}
+                    //   rTitle={arr.requested_item_title}
+                    //   aPicture={arr.requested_item_thumbnail}
+                    //   rPicture={arr.ask_item_thumbnail}
+                    //   rName={arr.requested_user_nickname}
+                    // />
                   );
                 })
               ) : (
@@ -171,7 +231,36 @@ export default function MyPage() {
               {myLike ? (
                 myLike.map(arr => {
                   return (
-                    <MyLike key={1} picture={arr.thumbnail} title={arr.title} />
+                    <li className="uk-card uk-card-default uk-card-body tag-Like">
+                      <Link to={`/view/${arr.item_idx}`}>
+                        <img src={arr.thumbnail} alt="이미지"></img>
+                        {arr.title}
+                      </Link>
+                      <div className="uk-align-right uk-child-width-1-1">
+                        <button
+                          onClick={() => {
+                            const loc = JSON.parse(localStorage.userToken)
+                              .data[0];
+                            axios({
+                              method: 'post',
+                              url: `/board/like/${arr.item_idx}`,
+                              headers: { token: loc }
+                            })
+                              .then(function(response) {
+                                console.log(response);
+                                setLoading({});
+                              })
+                              .catch(function(error) {
+                                console.log(error);
+                                setLoading({});
+                              });
+                          }}
+                          className="uk-button uk-button-danger uk-grid-margin"
+                        >
+                          <span href uk-icon="heart" />
+                        </button>
+                      </div>
+                    </li>
                   );
                 })
               ) : (

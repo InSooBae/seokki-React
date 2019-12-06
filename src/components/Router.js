@@ -18,6 +18,7 @@ import Register from './Register';
 import ViewProduct from './ViewProduct';
 import SearchResult from './SearchResult';
 import EditInfo from './EditInfo';
+import ShowAll from './ShowAll';
 // if logged in
 
 const LoggedInRoutes = () => (
@@ -34,6 +35,7 @@ const LoggedInRoutes = () => (
           <Route path="/register" exact component={Register} />
           <Route path="/search" exact component={SearchResult} />
           <Route path="/edit" exact component={EditInfo} />
+          <Route path="/showall/:id" exact component={ShowAll} />
         </div>
         <Recent />
       </div>

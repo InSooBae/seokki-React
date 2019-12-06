@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios, { put } from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Reply from './Reply';
 import useInput from '../Hooks/useInput';
 import Input from '../Hooks/Input';
+import { red } from 'ansi-colors';
+import { setState } from 'expect/build/jestMatchersObject';
 export default function ViewProduct({ history, location, match }) {
   //댓글 출력 제어
   const [rep, setRep] = useState([]);
@@ -15,19 +17,40 @@ export default function ViewProduct({ history, location, match }) {
   const loc = JSON.parse(localStorage.userToken).data[0];
   //수정 제어
   const [mod, setMod] = useState(false);
+  const [home, setHome] = useState(false);
   const [photo, setPhoto] = useState('');
   const title = useInput('');
   const hashtag = useInput('');
   const text = useInput('');
   const category_idx = useInput(1);
+  let a = match.url;
+  let b = a.split('/')[2];
+  const [myProd, setMyProd] = useState([]);
+  const [trade, setTrade] = useState(false);
+  const [item, setItem] = useState(false);
+  const [myItem, setMyItem] = useState(false);
+  const [myRequire, setMyRequire] = useState([]);
+
+  const Product = () => {
+    axios
+      .get('/mypage/myproduct', {
+        headers: {
+          'Content-Type': 'application/json',
+          token: loc
+        }
+      })
+      .then(response => {
+        console.log(response);
+        setMyProd(response.data.data);
+      })
+      .catch(error => {
+        console.log(error.message);
+        console.log(error);
+      });
+  };
 
   const onChangeImage = e => {
     setPhoto(e.target.files[0]);
-  };
-
-  const pass = () => {
-    var input = window.confirm('교환하시겠습니까?');
-    alert('교환신청하였습니다.');
   };
 
   const Dialog = a => {
@@ -45,6 +68,11 @@ export default function ViewProduct({ history, location, match }) {
     }
   };
 
+  const redirect = () => {
+    if (home) return <Redirect to="/" />;
+    else return <span></span>;
+  };
+
   const deleteProduct = e => {
     e.preventDefault();
     let a = match.url;
@@ -56,6 +84,7 @@ export default function ViewProduct({ history, location, match }) {
     })
       .then(function(response) {
         console.log(response);
+        setHome(true);
       })
       .catch(function(error) {
         console.log(error);
@@ -63,8 +92,6 @@ export default function ViewProduct({ history, location, match }) {
   };
 
   const modifyProduct = () => {
-    let a = match.url;
-    let b = a.split('/')[2];
     console.log(title, hashtag, category_idx);
     const url = `/board/${b}`;
     const formData = new FormData();
@@ -100,6 +127,7 @@ export default function ViewProduct({ history, location, match }) {
       .catch(function(error) {
         console.log(error);
       });
+    window.location.reload(false);
   };
 
   const handleFormSubmit = e => {
@@ -146,6 +174,24 @@ export default function ViewProduct({ history, location, match }) {
         console.log(error);
       });
   };
+
+  const Require = () => {
+    axios
+      .get('/mypage/ask', {
+        headers: {
+          'Content-Type': 'application/json',
+          token: loc
+        }
+      })
+      .then(response => {
+        setMyRequire(response.data.data);
+      })
+      .catch(error => {
+        console.log(error.message);
+        console.log(error);
+      });
+  };
+
   //마운트시 실행 url / 기준으로 나눈뒤 마지막 숫자 추가해
   useEffect(() => {
     let a = match.url;
@@ -164,6 +210,8 @@ export default function ViewProduct({ history, location, match }) {
         console.log(error);
       });
     printReply();
+    Product();
+    Require();
   }, []);
   return (
     <>
@@ -318,19 +366,111 @@ export default function ViewProduct({ history, location, match }) {
                       >
                         삭제
                       </button>
+                      {redirect()}
                     </>
                   ) : (
                     <span></span>
                   )}
-
-                  <button
-                    onClick={pass}
-                    className="uk-button uk-button-primary"
-                  >
-                    거 래 요 청
-                  </button>
+                  {ser.nickname ==
+                  JSON.parse(localStorage.userToken).data[1] ? (
+                    <></>
+                  ) : myRequire
+                      .map(arr => arr.requested_item_idx)
+                      .filter(arr => arr == b) == b ? (
+                    <button className="uk-button uk-button-danger">
+                      거 래 취 소
+                    </button>
+                  ) : (
+                    <button
+                      onClick={e => {
+                        e.preventDefault();
+                        setTrade(true);
+                      }}
+                      className="uk-button uk-button-primary"
+                    >
+                      거 래 요 청
+                    </button>
+                  )}
                 </p>
               </div>
+              {trade ? (
+                <div uk-slider="center: true">
+                  <div
+                    className="uk-position-relative uk-visible-toggle uk-light"
+                    tabIndex={-1}
+                  >
+                    <ul className="uk-slider-items uk-child-width-1-2@s uk-grid">
+                      {myProd ? (
+                        myProd.map(arr => {
+                          return (
+                            <li>
+                              <div className="uk-card uk-card-default">
+                                <div className="uk-card-media-top">
+                                  <img
+                                    width="300px"
+                                    height="300px"
+                                    src={arr.thumbnail}
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="uk-card-body">
+                                  <h3 className="uk-card-title">
+                                    {arr.title}
+                                    <button
+                                      onClick={e => {
+                                        e.preventDefault();
+                                        axios({
+                                          method: 'post',
+                                          url: `/communication/exchange/${b}`,
+                                          headers: {
+                                            token: JSON.parse(
+                                              localStorage.userToken
+                                            ).data[0]
+                                          },
+                                          data: {
+                                            myItemIdx: [`${arr.item_idx}`]
+                                          }
+                                        })
+                                          .then(function(response) {
+                                            console.log(response);
+                                          })
+                                          .catch(function(error) {
+                                            console.log(error);
+                                          });
+                                      }}
+                                      className="uk-button uk-button-danger uk-margin-left"
+                                    >
+                                      선택
+                                    </button>
+                                  </h3>
+                                  <p>교환하시려는 물건을 선택하세요</p>
+                                </div>
+                              </div>
+                            </li>
+                          );
+                        })
+                      ) : (
+                        <></>
+                      )}
+                    </ul>
+                    <a
+                      className="uk-position-center-left uk-position-small uk-hidden-hover"
+                      href="#"
+                      data-uk-slidenav-previous
+                      data-uk-slider-item="previous"
+                    />
+                    <a
+                      className="uk-position-center-right uk-position-small uk-hidden-hover"
+                      href="#"
+                      data-uk-slidenav-next
+                      data-uk-slider-item="next"
+                    />
+                  </div>
+                  <ul className="uk-slider-nav uk-dotnav uk-flex-center uk-margin" />
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
             <br />
             <div className="uk-card uk-card-default uk-card-hover uk-card-body ">
@@ -360,7 +500,7 @@ export default function ViewProduct({ history, location, match }) {
                     <Reply
                       key={''}
                       comment_id={arr.comment_idx}
-                      item={arr.item_idx}
+                      item={b}
                       writer={arr.nickname}
                       text={arr.text}
                       picture={arr.photo}

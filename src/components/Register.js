@@ -16,7 +16,7 @@ export default function Register() {
   const [valid, isvalid] = useState('');
   const loc = JSON.parse(localStorage.userToken).data[0];
 
-  const addProduct = () => {
+  const addProduct = async () => {
     const url = '/board';
     const formData = new FormData();
     formData.append('thumbnail', photo);
@@ -30,7 +30,7 @@ export default function Register() {
         'content-type': 'multipart/form-data'
       }
     };
-    return post(url, formData, config);
+    return await post(url, formData, config);
   };
 
   const handleFormSubmit = e => {
@@ -38,16 +38,10 @@ export default function Register() {
     e.preventDefault();
     addProduct().then(response => {
       console.log(response.data);
+      setSend(true);
     });
-    setSend(true);
   };
 
-  const handleValueChange = e => {
-    let nextState = {};
-    console.log(e.target.name, e.target.value);
-    nextState[e.target.name] = e.target.value;
-    this.setState(nextState);
-  };
   const onChangeImage = e => {
     setPhoto(e.target.files[0]);
   };
