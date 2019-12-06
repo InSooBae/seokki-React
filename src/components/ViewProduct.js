@@ -184,7 +184,10 @@ export default function ViewProduct({ history, location, match }) {
         }
       })
       .then(response => {
-        setMyRequire(response.data.data);
+        const {
+          data: { data }
+        } = response;
+        setMyRequire(data);
       })
       .catch(error => {
         console.log(error.message);
@@ -369,17 +372,29 @@ export default function ViewProduct({ history, location, match }) {
                       {redirect()}
                     </>
                   ) : (
-                    <span></span>
+                    <></>
                   )}
                   {ser.nickname ==
                   JSON.parse(localStorage.userToken).data[1] ? (
                     <></>
-                  ) : myRequire
+                  ) : myRequire ? (
+                    myRequire
                       .map(arr => arr.requested_item_idx)
                       .filter(arr => arr == b) == b ? (
-                    <button className="uk-button uk-button-danger">
-                      거 래 취 소
-                    </button>
+                      <button className="uk-button uk-button-danger">
+                        거 래 취 소
+                      </button>
+                    ) : (
+                      <button
+                        onClick={e => {
+                          e.preventDefault();
+                          setTrade(true);
+                        }}
+                        className="uk-button uk-button-primary"
+                      >
+                        거 래 요 청
+                      </button>
+                    )
                   ) : (
                     <button
                       onClick={e => {
@@ -433,9 +448,11 @@ export default function ViewProduct({ history, location, match }) {
                                         })
                                           .then(function(response) {
                                             console.log(response);
+                                            window.location.reload(false);
                                           })
                                           .catch(function(error) {
                                             console.log(error);
+                                            window.location.reload(false);
                                           });
                                       }}
                                       className="uk-button uk-button-danger uk-margin-left"

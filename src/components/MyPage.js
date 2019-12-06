@@ -106,14 +106,47 @@ export default function MyPage() {
       });
   };
 
-  const handleUpdata = () => {
-    setLoading({});
+  const Requested = () => {
+    axios
+      .get('/mypage/requested', {
+        headers: {
+          'Content-Type': 'application/json',
+          token: loc
+        }
+      })
+      .then(response => {
+        setMyRequest(response.data.data);
+      })
+      .catch(error => {
+        console.log(error.message);
+        console.log(error);
+      });
+  };
+
+  const Transaction = () => {
+    axios
+      .get('/mypage/exchangeList', {
+        headers: {
+          'Content-Type': 'application/json',
+          token: loc
+        }
+      })
+      .then(response => {
+        console.log(response);
+        setMyTran(response.data.data);
+      })
+      .catch(error => {
+        console.log(error.message);
+        console.log(error);
+      });
   };
 
   useEffect(() => {
     Product();
     Require();
     Like();
+    Requested();
+    Transaction();
     console.log(myProd);
   }, [loading]);
   return (
@@ -129,9 +162,7 @@ export default function MyPage() {
                 <a href="#">요청한 상품</a>
               </li>
               <li uk-filter-control=".tag-Request">
-                <a onClick={handleUpdata} href="#">
-                  요청받은 상품
-                </a>
+                <a href="#">요청받은 상품</a>
               </li>
               <li uk-filter-control=".tag-Tran">
                 <a href="#">교환 완료</a>
@@ -208,9 +239,32 @@ export default function MyPage() {
                         height="100px"
                         src={arr.ask_item_thumbnail}
                       ></img>
-                      {arr.ask_item_title}
+                      {arr.ask_item_title} (본인꺼)
                       <span></span>
-                      <a className="uk-card-badge uk-label">거래취소</a>
+                      <a
+                        onClick={() => {
+                          axios({
+                            method: 'delete',
+                            url: `/communication/exchange`,
+                            headers: { token: loc },
+                            data: {
+                              to_item_idx: arr.requested_item_idx,
+                              from_item_idx: arr.ask_item_idx
+                            }
+                          })
+                            .then(function(response) {
+                              console.log(response);
+                              setLoading({});
+                            })
+                            .catch(function(error) {
+                              console.log(error);
+                              setLoading({});
+                            });
+                        }}
+                        className="uk-card-badge uk-label"
+                      >
+                        거래취소
+                      </a>
                     </li>
                     // <MyReq
                     //   key={arr.date}
@@ -226,8 +280,104 @@ export default function MyPage() {
               ) : (
                 <div>존재안함</div>
               )}
-              <MyRequest />
-              <MyTran />
+              {myRequest ? (
+                myRequest.map(arr => {
+                  console.log(arr);
+                  return (
+                    <li className="uk-card uk-card-default uk-card-body tag-Request">
+                      <img
+                        width="100px"
+                        height="100px"
+                        src={arr.requested_item_thumbnail}
+                      ></img>
+                      {arr.requested_item_title} (본인꺼)
+                      <img width="50px" height="100px" src={change}></img>
+                      <img
+                        width="100px"
+                        height="100px"
+                        src={arr.ask_item_thumbnail}
+                      ></img>
+                      {arr.ask_item_title}
+                      <span></span>
+                      <a
+                        onClick={() => {
+                          axios({
+                            method: 'delete',
+                            url: `/communication/exchange`,
+                            headers: { token: loc },
+                            data: {
+                              to_item_idx: arr.requested_item_idx,
+                              from_item_idx: arr.ask_item_idx
+                            }
+                          })
+                            .then(function(response) {
+                              console.log(response);
+                              setLoading({});
+                            })
+                            .catch(function(error) {
+                              console.log(error);
+                              setLoading({});
+                            });
+                        }}
+                        className="uk-card-badge uk-label uk-margin-large-top"
+                      >
+                        거래취소
+                      </a>
+                      <a
+                        onClick={() => {
+                          axios({
+                            method: 'put',
+                            url: `/communication/exchange`,
+                            headers: { token: loc },
+                            data: {
+                              to_item_idx: `${arr.ask_item_idx}`,
+                              from_item_idx: `${arr.requested_item_idx}`
+                            }
+                          })
+                            .then(function(response) {
+                              console.log(response);
+                              setLoading({});
+                            })
+                            .catch(function(error) {
+                              console.log(error);
+                              setLoading({});
+                            });
+                        }}
+                        className=" uk-label uk-float-right"
+                      >
+                        거래
+                      </a>
+                    </li>
+                  );
+                })
+              ) : (
+                <></>
+              )}
+              {myTran ? (
+                myTran.map(arr => {
+                  console.log(arr);
+                  return (
+                    <li className="uk-card uk-card-default uk-card-body tag-Request">
+                      <img
+                        width="100px"
+                        height="100px"
+                        src={arr.thumbnail}
+                      ></img>
+                      {arr.title} (본인꺼)
+                      <img width="100px" height="100px" src={change}></img>
+                      <img
+                        width="100px"
+                        height="100px"
+                        src={arr.other_thumbnail}
+                      ></img>
+                      {arr.other_title}
+                      <span></span>
+                    </li>
+                  );
+                })
+              ) : (
+                <>{console.log(myTran)}</>
+              )}
               {myLike ? (
                 myLike.map(arr => {
                   return (
